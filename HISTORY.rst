@@ -2,10 +2,15 @@
 History
 =======
 
+2.2 (unreleased)
+----------------
+
+- Update code to make it Python 3 compatible [gforcada, 2024-04-02]
+
 2.1 (2014-02-19)
 ----------------
 
-- refactored logging, because it was always in my way when changing other parts 
+- refactored logging, because it was always in my way when changing other parts
   of the code.
   [jensens, 2014-02-19]
 
