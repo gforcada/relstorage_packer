@@ -502,8 +502,8 @@ def run(argv=sys.argv):
             'Finished cleanup phase after %s (%.2fs)' %
             (str(datetime.timedelta(seconds=processing_time)), processing_time)
         )
-    except Exception, e:
-        log.error(e.message)
+    except Exception as error:
+        log.error(str(error))
         raise
         exit(1)
     finally:
