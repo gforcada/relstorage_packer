@@ -61,6 +61,6 @@ def get_references(state):
     """Return the set of OIDs the given state refers to."""
     refs = set()
     if state:
-        for oid in referencesf(str(state)):
+        for oid in referencesf(state):
             refs.add(u64(oid))
     return refs
