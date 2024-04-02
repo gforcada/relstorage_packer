@@ -40,7 +40,7 @@ def get_storage(config_file):
     connection = config.storages[0]
     if connection.config.keep_history:
         raise RuntimeError('Packing does not support history keeping storages')
-    name = '%s (%s)' % ((connection.name or 'storage'),
+    name = '{} ({})'.format((connection.name or 'storage'),
                         connection.__class__.__name__)
     log.info("Opening %s...", name)
     storage = connection.open()

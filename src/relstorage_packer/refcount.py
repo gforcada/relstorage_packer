@@ -163,9 +163,9 @@ def _check_removed_refs(cursor, source_zoid, target_zoids):
     stmt = """
     SELECT zoid
     FROM object_inrefs
-    WHERE inref = %(source_zoid)s
-    AND zoid <> %(source_zoid)s;
-    """ % {'source_zoid': source_zoid}
+    WHERE inref = {source_zoid}
+    AND zoid <> {source_zoid};
+    """.format(source_zoid=source_zoid)
     cursor.execute(stmt)
     stmt = ""
     for zoid in cursor:
@@ -178,15 +178,15 @@ def _check_removed_refs(cursor, source_zoid, target_zoids):
         )
         stmt += """
         DELETE FROM object_inrefs
-        WHERE zoid = %(zoid)s
-        AND inref = %(source_zoid)s;
+        WHERE zoid = {zoid}
+        AND inref = {source_zoid};
 
         UPDATE object_inrefs
         SET numinrefs = numinrefs - 1
-        WHERE zoid = %(zoid)s
-        AND inref = %(zoid)s;
-        """ % {'source_zoid': source_zoid,
-               'zoid': zoid}
+        WHERE zoid = {zoid}
+        AND inref = {zoid};
+        """.format(source_zoid=source_zoid,
+               zoid=zoid)
     if stmt:
         cursor.execute(stmt)
 
@@ -250,7 +250,7 @@ def _remove_blob(storage, zoid):
         return
     fshelper = storage.blobhelper.fshelper
     blobpath = fshelper.getPathForOID(p64(zoid))
-    log.debug('-> Blobs for zoid=%s are at %s' % (zoid, blobpath))
+    log.debug('-> Blobs for zoid={} are at {}'.format(zoid, blobpath))
     if not os.path.exists(blobpath):
         log.debug('-> No Blobs to remove')
         return
@@ -281,24 +281,24 @@ def _remove_zoid(cursor, zoid):
     for target_zoid in target_zoids:
         stmt += """
         DELETE FROM object_inrefs
-        WHERE zoid = %(target_zoid)s
-        AND inref = %(source_zoid)s;
+        WHERE zoid = {target_zoid}
+        AND inref = {source_zoid};
 
         UPDATE object_inrefs
         SET numinrefs = numinrefs - 1
-        WHERE zoid = %(target_zoid)s
-        AND inref = %(target_zoid)s;
-        """ % {'source_zoid': source_zoid,
-               'target_zoid': target_zoid}
+        WHERE zoid = {target_zoid}
+        AND inref = {target_zoid};
+        """.format(source_zoid=source_zoid,
+               target_zoid=target_zoid)
 
     # finally delete data
     stmt += """
     DELETE FROM object_inrefs
-    WHERE zoid =  %(zoid)s;
+    WHERE zoid =  {zoid};
 
     DELETE FROM object_state
-    WHERE zoid =  %(zoid)s;
-    """ % {'zoid': zoid}
+    WHERE zoid =  {zoid};
+    """.format(zoid=zoid)
     cursor.execute(stmt)
 
 
@@ -327,7 +327,7 @@ def remove_orphans(connection, cursor, storage):
         if (count % CYCLES_TO_RECONNECT) == 0:
             # get a fresh connection, else postgres server may consume too
             # much RAM .oO( sigh )
-            log.info('Refresh connection after {0} zoid cycles'.format(count))
+            log.info(f'Refresh connection after {count} zoid cycles')
             connection.close()
             connection, cursor = get_conn_and_cursor(storage)
         else:
@@ -443,7 +443,7 @@ def run(argv=sys.argv):
             log.info('Fetching number of all transactions from DB ...')
         else:
             log.info(
-                "Fetching number of new transactions since tid {0} "
+                "Fetching number of new transactions since tid {} "
                 "from DB ...".format(init_tid)
             )
         stats['overall_tids'] = changed_tids_len(cursor, init_tid)
