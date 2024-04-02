@@ -1,4 +1,5 @@
 """relstorage_packer - reference numinrefs process"""
+from __future__ import absolute_import
 from .utils import dbcommit
 from .utils import get_conn_and_cursor
 from .utils import get_references
@@ -135,7 +136,7 @@ def next_tid(cursor, lasttid):
 def changed_tids_len(cursor, tid):
     stmt = "SELECT COUNT(distinct tid) FROM object_state WHERE tid >=%d;" % tid
     cursor.execute(stmt)
-    (count,) = cursor.next()
+    (count,) = next(cursor)
     return count or 0
 
 
