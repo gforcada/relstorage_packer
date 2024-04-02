@@ -19,6 +19,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development',
         'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python :: 3',
     ],
     keywords='postgresql zodb pack zope',
     author='BlueDynamics Alliance',
