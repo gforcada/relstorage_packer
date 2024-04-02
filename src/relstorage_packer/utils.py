@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import logging
-from StringIO import StringIO
+from io import StringIO
 import ZConfig
 from ZODB.serialize import referencesf
 from ZODB.utils import u64
